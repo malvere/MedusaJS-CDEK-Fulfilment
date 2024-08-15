@@ -14,6 +14,7 @@ class CdekShipping extends AbstractFulfillmentService {
     private cdek: Cdek_sdk
     private token: any
     private cdek_login: Login
+    private from_location: string
 
     constructor(container, options) {
         super(container)
@@ -22,6 +23,7 @@ class CdekShipping extends AbstractFulfillmentService {
             account: options.account,
             secret: options.secret,
         };
+        this.from_location = options.from_location
     }
 
     async initialize() {
@@ -48,10 +50,12 @@ class CdekShipping extends AbstractFulfillmentService {
     }
 
     async validateOption(data: { [x: string]: unknown }): Promise<boolean> {
+        console.log("validate Data: ", data)
         return data.id == "cdek-shipping"
     }
 
     async canCalculate(data: { [x: string]: unknown }): Promise<boolean> {
+        console.log("calcData: ", data)
         return data.id === "cdek-shipping"
     }
 
@@ -61,9 +65,12 @@ class CdekShipping extends AbstractFulfillmentService {
         cart: Cart
     ): Promise<number> {
         await this.initialize()
+        // console.log("optionData: ", optionData)
+        // console.log("Data: ", data)
+        // console.log("cart: ", cart)
         const calcData: TariffList = {
-            from_location: { code: 270 },
-            to_location: { code: 440 },
+            from_location: { address: this.from_location },
+            to_location: { address: cart.shipping_address.address_1 },
             packages: cart.items.map(item => ({
                 weight: item.variant.weight * item.quantity,
                 height: item.variant.height,
@@ -71,6 +78,7 @@ class CdekShipping extends AbstractFulfillmentService {
                 width: item.variant.width,
             }))
         }
+        console.log("calcData: ", calcData)
         const price = await this.cdek.calculateOnTariffList(this.token, calcData)
         return price.data.tariff_codes[0].delivery_sum * 100
     }
@@ -121,9 +129,6 @@ class CdekShipping extends AbstractFulfillmentService {
             {
                 id: "cdek-shipping",
             },
-            // {
-            //     id: "cdek-shipping-dynamic",
-            // },
         ];
     }
 }

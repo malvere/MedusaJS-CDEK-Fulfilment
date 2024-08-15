@@ -45,7 +45,7 @@ export interface Location{
     sub_region?:string;
     city?:string;
     kladr_code?:string;
-    address?:string;
+    address?:any;
 }
 export interface Item{
     name:string;
