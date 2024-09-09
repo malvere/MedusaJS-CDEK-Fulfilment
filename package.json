@@ -26,7 +26,7 @@
     "prepare": "cross-env NODE_ENV=production npm run build:server"
   },
   "dependencies": {
-    "@tanstack/react-query": "4.22.0",
+    "@tanstack/react-query": "5.55.4",
     "axios": "^1.7.2",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
