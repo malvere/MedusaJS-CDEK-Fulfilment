@@ -35,7 +35,7 @@
     "medusa-interfaces": "latest",
     "prism-react-renderer": "^2.0.4",
     "request": "^2.88.2",
-    "typeorm": "0.3.16"
+    "typeorm": "0.3.20"
   },
   "devDependencies": {
     "@babel/cli": "^7.14.3",
